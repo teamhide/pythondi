@@ -1,5 +1,11 @@
 # Python Dependency Injection Library
 
+## Install
+
+```python
+pip3 install pythondi
+```
+
 ## Usage
 
 1. Add injection policy
