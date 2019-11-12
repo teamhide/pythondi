@@ -41,6 +41,9 @@ def configure_after_clear(provider: Provider) -> None:
     """Clear existing provider and configure new provider"""
     global _PROVIDER
 
+    if _PROVIDER:
+        clear()
+
     _PROVIDER = provider
 
 
