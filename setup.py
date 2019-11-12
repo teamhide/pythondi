@@ -5,8 +5,8 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name="PythonDI",
-    version="1.0.0",
+    name="pythondi",
+    version="1.0.1",
     author="Hide",
     author_email="padocon@naver.com",
     description="Python dependency injection library",
