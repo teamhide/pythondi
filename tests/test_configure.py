@@ -19,10 +19,11 @@ def test_configure_after_clear():
     with raises(Exception):
         configure(provider=provider)
 
+    provider = Provider()
     provider.bind(str, int)
-    configure_after_clear(provider=provider)
     from pythondi import _PROVIDER
-    print(_PROVIDER.bindings)
-    # assert isinstance(_PROVIDER, Provider)
-    # assert _PROVIDER.bindings[int] == str
+    configure_after_clear(provider=provider)
+    assert isinstance(_PROVIDER, Provider)
+    # print(_PROVIDER.bindings)
+    # assert _PROVIDER.bindings[str] == int
 

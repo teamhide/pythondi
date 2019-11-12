@@ -13,6 +13,14 @@ class Provider:
         """Binding class to another class"""
         self._bindings[cls] = new_cls
 
+    def unbind(self, cls) -> None:
+        """Unbinding class"""
+        self._bindings.pop(cls)
+
+    def clear_bindings(self) -> None:
+        """Clear bindings"""
+        self._bindings = {}
+
     @property
     def bindings(self) -> dict:
         """Return current binding classes"""
