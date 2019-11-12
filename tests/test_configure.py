@@ -24,6 +24,5 @@ def test_configure_after_clear():
     from pythondi import _PROVIDER
     configure_after_clear(provider=provider)
     assert isinstance(_PROVIDER, Provider)
-    # print(_PROVIDER.bindings)
-    # assert _PROVIDER.bindings[str] == int
+    assert _PROVIDER.bindings[int] == str
 

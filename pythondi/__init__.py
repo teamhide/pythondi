@@ -44,6 +44,15 @@ def configure_after_clear(provider: Provider) -> None:
     _PROVIDER = provider
 
 
+def clear(provider: Provider = None) -> None:
+    global _PROVIDER
+
+    _PROVIDER = None
+
+    if provider:
+        provider.clear_bindings()
+
+
 def inject(**params):
     def inner_func(func):
         @wraps(func)
