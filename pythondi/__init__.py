@@ -1,5 +1,6 @@
 import inspect
 from functools import wraps
+from typing import Optional, NoReturn
 
 _PROVIDER = None
 
@@ -18,7 +19,7 @@ class Provider:
         return self._bindings
 
 
-def configure(provider: Provider) -> None:
+def configure(provider: Provider) -> Optional[NoReturn]:
     """Configure provider"""
     global _PROVIDER
 
