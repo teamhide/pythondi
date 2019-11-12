@@ -21,25 +21,6 @@ class SQLRepo(Repo):
         print('SQLRepo')
 
 
-class DI:
-    def __init__(self):
-        self.provider = Provider()
-
-    def bind_to_provider(self) -> None:
-        # Inject `Impl` class to `Interface` class
-        self.provider.bind(Repo, SQLRepo)
-
-    def bind_and_configure(self) -> None:
-        # Binding provider
-        self.bind_to_provider()
-
-        # Configure injector
-        configure(provider=self.provider)
-
-        # Configure injector after clear provider
-        configure_after_clear(provider=self.provider)
-
-
 class Usecase:
     @inject()
     def __init__(self, repo: Repo):
@@ -47,7 +28,18 @@ class Usecase:
 
 
 if __name__ == '__main__':
-    di = DI()
-    di.bind_and_configure()
+    # Init provider
+    provider = Provider()
+
+    # Bind `Impl` class to `Interface` class
+    provider.bind(Repo, SQLRepo)
+
+    # Inject with configure
+    configure(provider=provider)
+
+    # Or if you want to fresh inject, use `configure_after_clear`
+    configure_after_clear(provider=provider)
+
+    # Init class without arguments
     u = Usecase()
     print(u.__dict__)

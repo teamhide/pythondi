@@ -5,32 +5,20 @@
 1. Add injection policy
 
 ```python
-from pythondi import Provider, configure
+from pythondi import Provider, configure, configure_after_clear
 
 
-class DI:
-    def __init__(self):
-        self.provider = Provider()
+# Init provider
+provider = Provider()
 
-    def bind_to_provider(self) -> None:
-        # Inject `Impl` class to `Interface` class
-        self.provider.bind(Repo, SQLRepo)
+# Bind `Impl` class to `Interface` class
+provider.bind(Repo, SQLRepo)
 
-    def bind_and_configure(self) -> None:
-        # Binding provider
-        self.bind_to_provider()
+# Inject with configure
+configure(provider=provider)
 
-        # Configure injector
-        configure(provider=self.provider)
-
-        # Configure injector after clear provider
-        configure_after_clear(provider=self.provider)
-
-
-if __name__ == '__main__':
-    di = DI()
-    di.bind_and_configure()
-
+# Or if you want to fresh inject, use `configure_after_clear`
+configure_after_clear(provider=provider)
 ```
 
 2. Import inject
@@ -72,3 +60,53 @@ class Usecase:
 ```
 
 In this case, do not have to configure providers and type annotation.
+
+**Full Example**
+
+```python
+import abc
+
+from pythondi import Provider, configure, configure_after_clear, inject
+
+
+class Repo:
+    """Interface class"""
+    __metaclass__ = abc.ABCMeta
+
+    @abc.abstractmethod
+    def get(self):
+        pass
+
+
+class SQLRepo(Repo):
+    """Impl class"""
+    def __init__(self):
+        pass
+
+    def get(self):
+        print('SQLRepo')
+
+
+class Usecase:
+    @inject()
+    def __init__(self, repo: Repo):
+        self.repo = repo
+
+
+if __name__ == '__main__':
+    # Init provider
+    provider = Provider()
+
+    # Bind `Impl` class to `Interface` class
+    provider.bind(Repo, SQLRepo)
+
+    # Inject with configure
+    configure(provider=provider)
+
+    # Or if you want to fresh inject, use `configure_after_clear`
+    configure_after_clear(provider=provider)
+
+    # Init class without arguments
+    u = Usecase()
+    print(u.__dict__)
+```
