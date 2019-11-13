@@ -1,17 +1,25 @@
-name: CI
+name: pythondi
 
-on: [push]
+on:
+  push:
+    branches:
+      - master
+      - develop
 
 jobs:
   build:
-
+    name: CI
     runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v1
-    - name: Run a one-line script
-      run: echo Hello, world!
-    - name: Run a multi-line script
-      run: |
-        echo Add other actions to build,
-        echo test, and deploy your project.
+
+    - name: Setup Python 3.7.5
+      uses: actions/setup-python@v1
+      with:
+        python-version: 3.7.5
+
+    - name: Install pytest
+      run: pip3 install pytest
+    - name: Testing
+      run: pytest
