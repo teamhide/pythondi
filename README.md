@@ -1,4 +1,4 @@
-# Python Dependency Injection Library
+# Python lightweight dependency injection library
 
 ## Installation
 
@@ -8,7 +8,7 @@ pip3 install pythondi
 
 ## Usage
 
-Add injection policy
+Binding classes and configure
 
 ```python
 from pythondi import Provider, configure, configure_after_clear
@@ -67,25 +67,27 @@ class Usecase:
 
 In this case, do not have to configure providers and type annotation.
 
-**Note**
+## Note
 
 At the moment of inject, class is automatically initialized.
 
 So you don't have to initialize your class inside of code.
 
-Yes:
+**Yes:**
 ```python
+@inject()
 def __init__(self, repo: Repo):
     self.repo = repo
 ```
 
-No:
+**No:**
 ```python
+@inject()
 def __init__(self, repo: Repo):
     self.repo = repo()
 ```
 
-**Full Example**
+## Full Example
 
 ```python
 import abc
@@ -127,10 +129,9 @@ if __name__ == '__main__':
     # Inject with configure
     configure(provider=provider)
 
-    # Or if you want to fresh inject, use `configure_after_clear`
+    # Or if you want to fresh injection, use `configure_after_clear`
     configure_after_clear(provider=provider)
 
     # Init class without arguments
     u = Usecase()
-    print(u.__dict__)
 ```
