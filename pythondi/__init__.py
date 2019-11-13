@@ -7,6 +7,11 @@ _PROVIDER = None
 _LOCK = threading.RLock()
 
 
+class InjectException(Exception):
+    def __init__(self, msg: str):
+        super().__init__(msg)
+
+
 class Provider:
     def __init__(self):
         self._bindings = {}
@@ -17,7 +22,10 @@ class Provider:
 
     def unbind(self, cls) -> None:
         """Unbinding class"""
-        self._bindings.pop(cls)
+        try:
+            self._bindings.pop(cls)
+        except KeyError:
+            raise InjectException(msg='Unbind exception')
 
     def clear_bindings(self) -> None:
         """Clear bindings"""
@@ -34,7 +42,7 @@ def configure(provider: Provider) -> Optional[NoReturn]:
     global _PROVIDER
 
     if _PROVIDER:
-        raise Exception('Already injected')
+        raise InjectException(msg='Already injected')
 
     with _LOCK:
         _PROVIDER = provider
@@ -51,14 +59,11 @@ def configure_after_clear(provider: Provider) -> None:
         _PROVIDER = provider
 
 
-def clear(provider: Provider = None) -> None:
+def clear() -> None:
     global _PROVIDER
 
     with _LOCK:
         _PROVIDER = None
-
-    if provider:
-        provider.clear_bindings()
 
 
 def inject(**params):

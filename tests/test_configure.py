@@ -1,6 +1,11 @@
 from pytest import raises
 
-from pythondi import configure, configure_after_clear, Provider
+from pythondi import (
+    configure,
+    configure_after_clear,
+    Provider,
+    InjectException
+)
 
 
 def test_configure():
@@ -16,7 +21,7 @@ def test_configure_after_clear():
     _PROVIDER = None
     provider = Provider()
     provider.bind(int, str)
-    with raises(Exception):
+    with raises(InjectException):
         configure(provider=provider)
 
     provider = Provider()
