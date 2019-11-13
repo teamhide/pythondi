@@ -17,7 +17,10 @@ class Provider:
 
     def unbind(self, cls) -> None:
         """Unbinding class"""
-        self._bindings.pop(cls)
+        try:
+            self._bindings.pop(cls)
+        except KeyError:
+            raise Exception('Unbind exception')
 
     def clear_bindings(self) -> None:
         """Clear bindings"""
@@ -51,14 +54,11 @@ def configure_after_clear(provider: Provider) -> None:
         _PROVIDER = provider
 
 
-def clear(provider: Provider = None) -> None:
+def clear() -> None:
     global _PROVIDER
 
     with _LOCK:
         _PROVIDER = None
-
-    if provider:
-        provider.clear_bindings()
 
 
 def inject(**params):
