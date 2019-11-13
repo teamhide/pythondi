@@ -1,6 +1,6 @@
 from pytest import raises
 
-from pythondi import Provider
+from pythondi import Provider, InjectException
 
 
 def test_bind():
@@ -11,7 +11,7 @@ def test_bind():
 
 def test_unbind():
     provider = Provider()
-    with raises(Exception):
+    with raises(InjectException):
         provider.unbind(cls=int)
 
     provider.bind(int, str)
