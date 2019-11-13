@@ -1,24 +1,5 @@
-import abc
-
 from pythondi import Provider, configure, configure_after_clear, inject
-
-
-class Repo:
-    """Interface class"""
-    __metaclass__ = abc.ABCMeta
-
-    @abc.abstractmethod
-    def get(self):
-        pass
-
-
-class SQLRepo(Repo):
-    """Impl class"""
-    def __init__(self):
-        pass
-
-    def get(self):
-        print('SQLRepo')
+from .repo import Repo, SQLRepo
 
 
 class Usecase:
@@ -42,4 +23,3 @@ if __name__ == '__main__':
 
     # Init class without arguments
     u = Usecase()
-    print(u.__dict__)

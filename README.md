@@ -1,4 +1,12 @@
-# Python lightweight dependency injection library
+# pythondi
+[![license]](/LICENSE)
+[![pypi]](https://pypi.org/project/pythondi/)
+[![pyversions]](http://pypi.python.org/pypi/pythondi)
+![badge](https://action-badges.now.sh/teamhide/pythondi)
+
+---
+
+pythondi is a lightweight dependency injection library for python
 
 ## Installation
 
@@ -135,3 +143,7 @@ if __name__ == '__main__':
     # Init class without arguments
     u = Usecase()
 ```
+[license]: https://img.shields.io/badge/license-MIT-blue.svg
+[pypi]: https://img.shields.io/pypi/v/chatterbox.py.svg
+[pyversions]: https://img.shields.io/pypi/pyversions/chatterbox.py.svg
+[travis]: https://travis-ci.org/JungWinter/chatterbox.svg
