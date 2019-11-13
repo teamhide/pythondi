@@ -144,6 +144,6 @@ if __name__ == '__main__':
     u = Usecase()
 ```
 [license]: https://img.shields.io/badge/license-MIT-blue.svg
-[pypi]: https://img.shields.io/pypi/v/chatterbox.py.svg
+[pypi]: https://img.shields.io/pypi/v/pythondi
 [pyversions]: https://img.shields.io/pypi/pyversions/chatterbox.py.svg
 [travis]: https://travis-ci.org/JungWinter/chatterbox.svg
