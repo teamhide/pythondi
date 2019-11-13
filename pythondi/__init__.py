@@ -1,8 +1,10 @@
 import inspect
+import threading
 from functools import wraps
 from typing import Optional, NoReturn
 
 _PROVIDER = None
+_LOCK = threading.RLock()
 
 
 class Provider:
@@ -34,7 +36,8 @@ def configure(provider: Provider) -> Optional[NoReturn]:
     if _PROVIDER:
         raise Exception('Already injected')
 
-    _PROVIDER = provider
+    with _LOCK:
+        _PROVIDER = provider
 
 
 def configure_after_clear(provider: Provider) -> None:
@@ -44,13 +47,15 @@ def configure_after_clear(provider: Provider) -> None:
     if _PROVIDER:
         clear()
 
-    _PROVIDER = provider
+    with _LOCK:
+        _PROVIDER = provider
 
 
 def clear(provider: Provider = None) -> None:
     global _PROVIDER
 
-    _PROVIDER = None
+    with _LOCK:
+        _PROVIDER = None
 
     if provider:
         provider.clear_bindings()
