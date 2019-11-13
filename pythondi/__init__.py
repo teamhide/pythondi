@@ -41,10 +41,10 @@ def configure(provider: Provider) -> Optional[NoReturn]:
     """Configure provider"""
     global _PROVIDER
 
-    if _PROVIDER:
-        raise InjectException(msg='Already injected')
-
     with _LOCK:
+        if _PROVIDER:
+            raise InjectException(msg='Already injected')
+
         _PROVIDER = provider
 
 
@@ -52,10 +52,10 @@ def configure_after_clear(provider: Provider) -> None:
     """Clear existing provider and configure new provider"""
     global _PROVIDER
 
-    if _PROVIDER:
-        clear()
-
     with _LOCK:
+        if _PROVIDER:
+            clear()
+
         _PROVIDER = provider
 
 
