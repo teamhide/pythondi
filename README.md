@@ -1,6 +1,6 @@
 # Python Dependency Injection Library
 
-## Install
+## Installation
 
 ```python
 pip3 install pythondi
@@ -8,7 +8,7 @@ pip3 install pythondi
 
 ## Usage
 
-1. Add injection policy
+Add injection policy
 
 ```python
 from pythondi import Provider, configure, configure_after_clear
@@ -27,13 +27,13 @@ configure(provider=provider)
 configure_after_clear(provider=provider)
 ```
 
-2. Import inject
+Import inject
 
 ```python
 from pythondi import inject
 ```
 
-3. Add type annotations that you want to inject dependencies
+Add type annotations that you want to inject dependencies
 
 ```python
 class Usecase:
@@ -41,7 +41,7 @@ class Usecase:
         self.repo = repo
 ```
 
-4. Add decorator
+Add decorator
 
 ```python
 class Usecase:
@@ -50,7 +50,7 @@ class Usecase:
         self.repo = repo
 ```
 
-5. Initialize class with no arguments
+Initialize class with no arguments
 
 ```python
 usecase = Usecase()
@@ -66,6 +66,24 @@ class Usecase:
 ```
 
 In this case, do not have to configure providers and type annotation.
+
+**Note**
+
+At the moment of inject, class is automatically initialized.
+
+So you don't have to initialize your class inside of code.
+
+Yes:
+```python
+def __init__(self, repo: Repo):
+    self.repo = repo
+```
+
+No:
+```python
+def __init__(self, repo: Repo):
+    self.repo = repo()
+```
 
 **Full Example**
 
