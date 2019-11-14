@@ -41,6 +41,11 @@ class Container:
     _instance = None
     _provider = None
 
+    def __new__(cls, *args, **kwargs):
+        if not Container._instance:
+            Container._instance = super().__new__(cls, *args, **kwargs)
+        return Container._instance
+
     @classmethod
     def set(cls, provider: Provider):
         """Set provider"""
@@ -55,11 +60,6 @@ class Container:
     def clear(cls):
         """Clear provider"""
         cls._provider = {}
-
-    def __new__(cls, *args, **kwargs):
-        if not Container._instance:
-            Container._instance = super().__new__(cls)
-        return Container._instance
 
 
 def configure(provider: Provider) -> Optional[NoReturn]:
