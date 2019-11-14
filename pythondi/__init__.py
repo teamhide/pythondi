@@ -3,7 +3,6 @@ import threading
 from functools import wraps
 from typing import Optional, NoReturn
 
-_PROVIDER = None
 _LOCK = threading.RLock()
 
 
@@ -17,11 +16,11 @@ class Provider:
         self._bindings = {}
 
     def bind(self, cls, new_cls) -> None:
-        """Binding class to another class"""
+        """Bind class to another class"""
         self._bindings[cls] = new_cls
 
     def unbind(self, cls) -> None:
-        """Unbinding class"""
+        """Unbind class"""
         try:
             self._bindings.pop(cls)
         except KeyError:
@@ -33,49 +32,75 @@ class Provider:
 
     @property
     def bindings(self) -> dict:
-        """Return current binding classes"""
+        """Get current bindings"""
         return self._bindings
 
 
-def configure(provider: Provider) -> Optional[NoReturn]:
-    """Configure provider"""
-    global _PROVIDER
+class Container:
+    """Singleton container class"""
+    _instance = None
+    _provider = None
 
+    @classmethod
+    def set(cls, provider: Provider):
+        """Set provider"""
+        cls._provider = provider
+
+    @classmethod
+    def get(cls):
+        """Get current provider"""
+        return cls._provider
+
+    @classmethod
+    def clear(cls):
+        """Clear provider"""
+        cls._provider = {}
+
+    def __new__(cls, *args, **kwargs):
+        if not Container._instance:
+            Container._instance = super().__new__(cls)
+        return Container._instance
+
+
+def configure(provider: Provider) -> Optional[NoReturn]:
+    """Configure provider to container"""
     with _LOCK:
-        if _PROVIDER:
+        if Container.get():
             raise InjectException(msg='Already injected')
 
-        _PROVIDER = provider
+    with _LOCK:
+        Container.set(provider=provider)
 
 
 def configure_after_clear(provider: Provider) -> None:
     """Clear existing provider and configure new provider"""
-    global _PROVIDER
-
     with _LOCK:
-        if _PROVIDER:
+        if Container.get():
             clear()
 
-        _PROVIDER = provider
+        Container.set(provider=provider)
 
 
 def clear() -> None:
-    global _PROVIDER
+    """Clear current provider"""
+    _container = Container
 
     with _LOCK:
-        _PROVIDER = None
+        _container.clear()
 
 
 def inject(**params):
     def inner_func(func):
         @wraps(func)
         def wrapper(*args, **kwargs):
+            _provider = Container.get()
+
             # Case of auto injection
             if params == {}:
                 annotations = inspect.getfullargspec(func).annotations
                 for k, v in annotations.items():
-                    if v in _PROVIDER.bindings:
-                        kwargs[k] = _PROVIDER.bindings[v]()
+                    if v in _provider.bindings:
+                        kwargs[k] = _provider.bindings[v]()
             # Case of manual injection
             else:
                 for k, v in params.items():
