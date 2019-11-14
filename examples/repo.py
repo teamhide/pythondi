@@ -12,8 +12,5 @@ class Repo:
 
 class SQLRepo(Repo):
     """Impl class"""
-    def __init__(self):
-        pass
-
     def get(self):
         print('SQLRepo')

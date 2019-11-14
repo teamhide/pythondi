@@ -114,9 +114,6 @@ class Repo:
 
 class SQLRepo(Repo):
     """Impl class"""
-    def __init__(self):
-        pass
-
     def get(self):
         print('SQLRepo')
 
@@ -145,5 +142,4 @@ if __name__ == '__main__':
 ```
 [license]: https://img.shields.io/badge/license-MIT-blue.svg
 [pypi]: https://img.shields.io/pypi/v/pythondi
-[pyversions]: https://img.shields.io/pypi/pyversions/chatterbox.py.svg
-[travis]: https://travis-ci.org/JungWinter/chatterbox.svg
+[pyversions]: https://img.shields.io/pypi/pyversions/pythondi
