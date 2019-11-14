@@ -140,6 +140,6 @@ if __name__ == '__main__':
     # Init class without arguments
     u = Usecase()
 ```
-[license]: https://img.shields.io/badge/license-MIT-blue.svg
+[license]: https://img.shields.io/badge/License-Apache%202.0-blue.svg
 [pypi]: https://img.shields.io/pypi/v/pythondi
 [pyversions]: https://img.shields.io/pypi/pyversions/pythondi
