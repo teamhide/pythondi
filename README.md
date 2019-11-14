@@ -95,7 +95,7 @@ def __init__(self, repo: Repo):
     self.repo = repo()
 ```
 
-## Full Example
+## General example
 
 ```python
 import abc
@@ -139,6 +139,111 @@ if __name__ == '__main__':
 
     # Init class without arguments
     u = Usecase()
+```
+
+## Flask example
+
+```python
+from flask import Flask, Blueprint, jsonify
+
+from pythondi import Provider, configure, inject
+from .repo import Repo, SQLRepo
+
+bp = Blueprint('home', __name__)
+
+
+@bp.route('/')
+def home():
+    usecase = Usecase()
+    usecase.repo.get()
+    return jsonify({'hello': 'world'})
+
+
+class Usecase:
+    @inject()
+    def __init__(self, repo: Repo):
+        self.repo = repo
+
+
+def create_app():
+    provider = Provider()
+    provider.bind(Repo, SQLRepo)
+    configure(provider=provider)
+    app = Flask(__name__)
+    app.register_blueprint(bp)
+    return app
+
+
+if __name__ == '__main__':
+    app = create_app()
+    app.run(debug=True)
+```
+
+## Sanic example
+```python
+import abc
+
+from sanic import Sanic, Blueprint
+from sanic.response import json
+from pythondi import Provider, configure, inject
+
+
+class Repo:
+    """Interface class"""
+    __metaclass__ = abc.ABCMeta
+
+    @abc.abstractmethod
+    def get(self):
+        pass
+
+
+class SQLRepo(Repo):
+    """Impl class"""
+    def __init__(self):
+        pass
+
+    def get(self):
+        print('SQLRepo')
+
+
+bp = Blueprint('home', url_prefix='/')
+
+
+@bp.route('/')
+async def home(request):
+    usecase = Usecase()
+    usecase.repo.get()
+    return json({'hello': 'world'})
+
+
+class Usecase:
+    @inject()
+    def __init__(self, repo: Repo):
+        self.repo = repo
+
+
+def create_app():
+    provider = Provider()
+    provider.bind(Repo, SQLRepo)
+    configure(provider=provider)
+    app = Sanic(__name__)
+    app.blueprint(bp)
+    return app
+
+
+if __name__ == '__main__':
+    app = create_app()
+    app.run(debug=True)
+```
+
+## Django example
+
+```python
+"""
+In case of django, just put the initializing code inside of django startup
+
+You can use project folder's __init__.py or urls.py
+"""
 ```
 [license]: https://img.shields.io/badge/License-Apache%202.0-blue.svg
 [pypi]: https://img.shields.io/pypi/v/pythondi
