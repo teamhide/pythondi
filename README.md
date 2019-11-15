@@ -147,9 +147,27 @@ if __name__ == '__main__':
 from flask import Flask, Blueprint, jsonify
 
 from pythondi import Provider, configure, inject
-from .repo import Repo, SQLRepo
+import abc
 
 bp = Blueprint('home', __name__)
+
+
+class Repo:
+    """Interface class"""
+    __metaclass__ = abc.ABCMeta
+
+    @abc.abstractmethod
+    def get(self):
+        pass
+
+
+class SQLRepo(Repo):
+    """Impl class"""
+    def __init__(self):
+        pass
+
+    def get(self):
+        print('SQLRepo')
 
 
 @bp.route('/')
@@ -185,6 +203,7 @@ import abc
 
 from sanic import Sanic, Blueprint
 from sanic.response import json
+
 from pythondi import Provider, configure, inject
 
 
@@ -234,6 +253,7 @@ def create_app():
 if __name__ == '__main__':
     app = create_app()
     app.run(debug=True)
+
 ```
 
 ## Django example
