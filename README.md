@@ -22,11 +22,16 @@ Binding classes and configure
 from pythondi import Provider, configure, configure_after_clear
 
 
-# Init provider
+# There is three ways to binding classes
+# 1. Init provider without arguments
 provider = Provider()
-
-# Bind `Impl` class to `Interface` class
 provider.bind(Repo, SQLRepo)
+
+# 2. Init provider with arguments 
+provider = Provider(cls=Repo, new_cls=SQLRepo)
+
+# 3. Init provider with dict arguments
+provider = Provider(bind={Repo: SQLRepo})
 
 # Inject with configure
 configure(provider=provider)
