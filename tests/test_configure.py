@@ -15,7 +15,6 @@ def test_configure():
     configure(provider=provider)
     assert isinstance(Container.get(), Provider)
     assert Container.get().bindings[int] == str
-
     with raises(InjectException):
         configure(provider=provider)
 

@@ -3,6 +3,17 @@ from pytest import raises
 from pythondi import Provider, InjectException
 
 
+def test_bind_class_init():
+    provider = Provider(cls=int, new_cls=str)
+    assert provider.bindings[int] == str
+
+
+def test_bind_class_init_with_dict():
+    bind = {int: str}
+    provider = Provider(bind=bind)
+    assert provider.bindings[int] == str
+
+
 def test_bind():
     provider = Provider()
     provider.bind(int, str)

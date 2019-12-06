@@ -12,8 +12,15 @@ class InjectException(Exception):
 
 
 class Provider:
-    def __init__(self):
+    def __init__(self, cls=None, new_cls=None, bind=None):
         self._bindings = {}
+
+        if cls and new_cls:
+            self._bindings[cls] = new_cls
+
+        if bind:
+            for k, v in bind.items():
+                self._bindings[k] = v
 
     def bind(self, cls, new_cls) -> None:
         """Bind class to another class"""
