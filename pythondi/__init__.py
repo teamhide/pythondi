@@ -12,19 +12,25 @@ class InjectException(Exception):
 
 
 class Provider:
-    def __init__(self, cls=None, new_cls=None, bind=None):
+    def __init__(self, cls=None, new_cls=None, classes: dict = None):
         self._bindings = {}
 
         if cls and new_cls:
             self._bindings[cls] = new_cls
 
-        if bind:
-            for k, v in bind.items():
+        if classes:
+            for k, v in classes.items():
                 self._bindings[k] = v
 
-    def bind(self, cls, new_cls) -> None:
+    def bind(self, cls=None, new_cls=None, classes: dict = None) -> None:
         """Bind class to another class"""
-        self._bindings[cls] = new_cls
+        if cls and new_cls:
+            self._bindings[cls] = new_cls
+        elif classes:
+            for k, v in classes.items():
+                self._bindings[k] = v
+        else:
+            raise InjectException(msg='Binding exception')
 
     def unbind(self, cls) -> None:
         """Unbind class"""
@@ -44,11 +50,11 @@ class Provider:
 
 
 class Container:
-    """Singleton container class"""
     _instance = None
     _provider = None
 
     def __new__(cls, *args, **kwargs):
+        """Singleton"""
         if not Container._instance:
             Container._instance = super().__new__(cls, *args, **kwargs)
         return Container._instance
