@@ -10,7 +10,7 @@ def test_bind_class_init():
 
 def test_bind_class_init_with_dict():
     bind = {int: str}
-    provider = Provider(bind=bind)
+    provider = Provider(classes=bind)
     assert provider.bindings[int] == str
 
 
@@ -18,6 +18,14 @@ def test_bind():
     provider = Provider()
     provider.bind(int, str)
     assert provider.bindings[int] == str
+
+
+def test_bind_with_classes():
+    provider = Provider()
+    provider.bind(classes={int: str})
+    assert provider.bindings[int] == str
+    provider.bind(int, dict)
+    assert provider.bindings[int] == dict
 
 
 def test_unbind():

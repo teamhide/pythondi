@@ -25,13 +25,16 @@ from pythondi import Provider, configure, configure_after_clear
 # There is three ways to binding classes
 # 1. Init provider without arguments
 provider = Provider()
+# Bind one by one
 provider.bind(Repo, SQLRepo)
+# Bind all at once
+provider.bind(classes={Repo: SQLRepo})
 
 # 2. Init provider with arguments 
 provider = Provider(cls=Repo, new_cls=SQLRepo)
 
-# 3. Init provider with dict arguments
-provider = Provider(bind={Repo: SQLRepo})
+# 3. Init provider with dictionary
+provider = Provider(classes={Repo: SQLRepo})
 
 # Inject with configure
 configure(provider=provider)
