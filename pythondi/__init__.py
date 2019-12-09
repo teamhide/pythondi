@@ -103,7 +103,7 @@ def inject(**params):
             _provider = Container.get()
 
             # Case of auto injection
-            if params == {}:
+            if not params:
                 annotations = inspect.getfullargspec(func).annotations
                 for k, v in annotations.items():
                     if v in _provider.bindings:
