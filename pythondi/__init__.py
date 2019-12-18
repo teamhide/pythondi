@@ -81,7 +81,6 @@ def configure(provider: Provider) -> Optional[NoReturn]:
         if Container.get():
             raise InjectException(msg='Already injected')
 
-    with _LOCK:
         Container.set(provider=provider)
 
 
