@@ -9,14 +9,14 @@ def test_singleton():
 
 def test_clear():
     Container.set(provider=Provider())
-    assert Container.get() != {}
+    assert Container.get() is not None
     Container.clear()
-    assert Container.get() == {}
+    assert Container.get() is None
 
 
 def test_set():
     Container.clear()
-    assert Container.get() == {}
+    assert Container.get() is None
     provider = Provider()
     Container.set(provider=provider)
     assert Container.get() == provider
@@ -24,6 +24,6 @@ def test_set():
 
 def test_get():
     Container.clear()
-    assert Container.get() == {}
+    assert Container.get() is None
     Container.set(provider=Provider())
-    assert Container.get() != {}
+    assert Container.get() is not None

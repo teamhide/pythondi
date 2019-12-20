@@ -72,7 +72,7 @@ class Container:
     @classmethod
     def clear(cls) -> None:
         """Clear provider"""
-        cls._provider = {}
+        cls._provider = None
 
 
 def configure(provider: Provider) -> Optional[NoReturn]:
