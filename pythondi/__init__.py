@@ -53,12 +53,6 @@ class Container:
     _instance = None
     _provider = None
 
-    def __new__(cls, *args, **kwargs):
-        """Singleton"""
-        if not Container._instance:
-            Container._instance = super().__new__(cls, *args, **kwargs)
-        return Container._instance
-
     @classmethod
     def set(cls, provider: Provider) -> None:
         """Set provider"""
