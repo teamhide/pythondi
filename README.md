@@ -16,25 +16,45 @@ pip3 install pythondi
 
 ## Usage
 
-Binding classes and configure
+First, you have to binding classes to provider.
+
+There is three different ways to binding.
+
+- Bind one by one
 
 ```python
-from pythondi import Provider, configure, configure_after_clear
+from pythondi import Provider
 
 
-# There is three ways to binding classes
-# 1. Init provider without arguments
 provider = Provider()
-# Bind one by one
 provider.bind(Repo, SQLRepo)
-# Bind all at once
-provider.bind(classes={Repo: SQLRepo})
+provider.bind(Usecase, CreateUsecase)
+```
 
-# 2. Init provider with arguments 
+- Binding at initialize
+
+```python
+from pythondi import Provider
+
+
 provider = Provider(cls=Repo, new_cls=SQLRepo)
+```
 
-# 3. Init provider with dictionary
+- Binding at initialize with dictionary
+
+```python
+from pythondi import Provider
+
+
 provider = Provider(classes={Repo: SQLRepo})
+```
+
+
+After binding, you need to configure it to container
+
+```python
+from pythondi import configure, configure_after_clear
+
 
 # Inject with configure
 configure(provider=provider)
