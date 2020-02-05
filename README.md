@@ -20,7 +20,7 @@ First, you have to binding classes to provider.
 
 There is three different ways to binding.
 
-- Bind one by one
+- Binding one by one
 
 ```python
 from pythondi import Provider
@@ -31,7 +31,7 @@ provider.bind(Repo, SQLRepo)
 provider.bind(Usecase, CreateUsecase)
 ```
 
-- Binding at initialize
+- Binding at initialization(In this case, you can bind only one)
 
 ```python
 from pythondi import Provider
@@ -40,13 +40,13 @@ from pythondi import Provider
 provider = Provider(cls=Repo, new_cls=SQLRepo)
 ```
 
-- Binding at initialize with dictionary
+- Binding at initialization with dictionary
 
 ```python
 from pythondi import Provider
 
 
-provider = Provider(classes={Repo: SQLRepo})
+provider = Provider(classes={Repo: SQLRepo, Usecase: CreateUsecase})
 ```
 
 
