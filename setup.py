@@ -6,7 +6,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="pythondi",
-    version="1.1.5",
+    version="1.1.6",
     author="Hide",
     author_email="padocon@naver.com",
     description="Python dependency injection library",
@@ -25,5 +25,5 @@ setuptools.setup(
         "License :: OSI Approved :: Apache Software License",
         "Operating System :: OS Independent",
     ],
-    python_requires='>=3.4',
+    python_requires='>=3.5',
 )
