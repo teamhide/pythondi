@@ -22,7 +22,12 @@ class Provider:
             for k, v in classes.items():
                 self._bindings[k] = v
 
-    def bind(self, cls=None, new_cls=None, classes: dict = None) -> None:
+    def bind(
+        self,
+        cls=None,
+        new_cls=None,
+        classes: dict = None,
+    ) -> Optional[NoReturn]:
         """Bind class to another class"""
         if cls and new_cls:
             self._bindings[cls] = new_cls
@@ -30,14 +35,14 @@ class Provider:
             for k, v in classes.items():
                 self._bindings[k] = v
         else:
-            raise InjectException(msg='Binding exception')
+            raise InjectException(msg="Binding exception")
 
-    def unbind(self, cls) -> None:
+    def unbind(self, cls) -> Optional[NoReturn]:
         """Unbind class"""
         try:
             self._bindings.pop(cls)
         except KeyError:
-            raise InjectException(msg='Unbind exception')
+            raise InjectException(msg="Unbind exception")
 
     def clear_bindings(self) -> None:
         """Clear bindings"""
@@ -73,7 +78,7 @@ def configure(provider: Provider) -> Optional[NoReturn]:
     """Configure provider to container"""
     with _LOCK:
         if Container.get():
-            raise InjectException(msg='Already injected')
+            raise InjectException(msg="Already injected")
 
         Container.set(provider=provider)
 
@@ -112,5 +117,7 @@ def inject(**params):
                 for k, v in params.items():
                     kwargs[k] = v()
             func(*args, **kwargs)
+
         return wrapper
+
     return inner_func
