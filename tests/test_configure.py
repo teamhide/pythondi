@@ -5,7 +5,7 @@ from pythondi import (
     configure_after_clear,
     Provider,
     InjectException,
-    Container
+    Container,
 )
 
 

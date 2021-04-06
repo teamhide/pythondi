@@ -22,12 +22,7 @@ class Provider:
             for k, v in classes.items():
                 self._bindings[k] = v
 
-    def bind(
-        self,
-        cls=None,
-        new_cls=None,
-        classes: dict = None,
-    ) -> Optional[NoReturn]:
+    def bind(self, cls=None, new_cls=None, classes: dict = None,) -> Optional[NoReturn]:
         """Bind class to another class"""
         if cls and new_cls:
             self._bindings[cls] = new_cls
@@ -102,10 +97,12 @@ def clear() -> None:
 
 def inject(**params):
     def inner_func(func):
+        _provider = Container.get()
+        if not _provider:
+            raise InjectException(msg="Provider does not configured")
+
         @wraps(func)
         def wrapper(*args, **kwargs):
-            _provider = Container.get()
-
             # Case of auto injection
             if not params:
                 annotations = inspect.getfullargspec(func).annotations
@@ -116,8 +113,13 @@ def inject(**params):
             else:
                 for k, v in params.items():
                     kwargs[k] = v()
-            func(*args, **kwargs)
+            if inspect.iscoroutinefunction(func):
+                async def _inject(*args, **kwargs):
+                    return await func(*args, **kwargs)
+            else:
+                def _inject(*args, **kwargs):
+                    return func(*args, **kwargs)
 
+            return _inject(*args, **kwargs)
         return wrapper
-
     return inner_func
