@@ -113,6 +113,7 @@ def inject(**params):
             else:
                 for k, v in params.items():
                     kwargs[k] = v()
+
             if inspect.iscoroutinefunction(func):
                 async def _inject(*args, **kwargs):
                     return await func(*args, **kwargs)

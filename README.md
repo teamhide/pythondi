@@ -34,7 +34,7 @@ provider.bind(Repo, SQLRepo)
 provider.bind(Usecase, CreateUsecase)
 ```
 
-- Binding at initialization(In this case, you can bind only one)
+- Binding at initialization
 
 ```python
 from pythondi import Provider
