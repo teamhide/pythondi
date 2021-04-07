@@ -14,10 +14,10 @@ jobs:
     steps:
     - uses: actions/checkout@v1
 
-    - name: Setup Python 3.8.5
+    - name: Setup Python 3.8.8
       uses: actions/setup-python@v1
       with:
-        python-version: 3.8.5
+        python-version: 3.8.8
 
     - name: Install pytest
       run: pip3 install pytest

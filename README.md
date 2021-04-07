@@ -9,6 +9,8 @@
 
 pythondi is a lightweight dependency injection library for python
 
+Support both sync and async functions
+
 ## Installation
 
 ```python
