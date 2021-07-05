@@ -106,6 +106,33 @@ class Usecase:
 
 In this case, do not have to configure providers and type annotation.
 
+## For test
+
+In case of test codes, you probably want to use mock objects.
+
+In that case, you must use keyword arguments.
+
+```python
+class MockRepo:
+    pass
+
+
+@inject()
+def test(repo: Repo):
+    return repo
+```
+
+**Yes:**
+```python
+test(repo=MockRepo())
+```
+
+**No:**
+```python
+test(MockRepo())
+test(MockRepo)
+```
+
 ## Note
 
 At the moment of inject, class is automatically initialized.

@@ -107,7 +107,7 @@ def inject(**params):
             if not params:
                 annotations = inspect.getfullargspec(func).annotations
                 for k, v in annotations.items():
-                    if v in _provider.bindings:
+                    if v in _provider.bindings and k not in kwargs:
                         kwargs[k] = _provider.bindings[v]()
             # Case of manual injection
             else:

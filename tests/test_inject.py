@@ -177,3 +177,20 @@ async def test_async_inject_with_parameter_multiple_bind():
         assert isinstance(usecase, UserUsecase)
 
     await func()
+
+
+@pytest.mark.asyncio
+async def test_manual_provide_args_outside():
+    provider = Provider()
+    provider.bind(classes={Repo: SQLRepo})
+    configure_after_clear(provider)
+
+    class MockRepo:
+        pass
+
+    @inject()
+    async def func(repo: Repo):
+        return repo
+
+    result = await func(repo=MockRepo())
+    assert isinstance(result, MockRepo)
