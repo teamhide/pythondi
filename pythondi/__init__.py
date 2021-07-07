@@ -97,12 +97,12 @@ def clear() -> None:
 
 def inject(**params):
     def inner_func(func):
-        _provider = Container.get()
-        if not _provider:
-            raise InjectException(msg="Provider does not configured")
-
         @wraps(func)
         def wrapper(*args, **kwargs):
+            _provider = Container.get()
+            if not _provider:
+                raise InjectException(msg="Provider does not configured")
+
             # Case of auto injection
             if not params:
                 annotations = inspect.getfullargspec(func).annotations
