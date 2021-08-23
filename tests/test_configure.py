@@ -17,6 +17,7 @@ def test_configure():
     assert Container.get().bindings[int] == str
     with raises(InjectException):
         configure(provider=provider)
+    Container.clear()
 
 
 def test_configure_after_clear():
