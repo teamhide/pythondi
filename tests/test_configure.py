@@ -1,4 +1,5 @@
 from pytest import raises
+from pythondi import Container
 
 from pythondi import (
     configure,
@@ -10,6 +11,7 @@ from pythondi import (
 
 
 def test_configure():
+    Container.clear()
     provider = Provider()
     provider.bind(int, str)
     configure(provider=provider)
