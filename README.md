@@ -2,7 +2,6 @@
 [![license]](/LICENSE)
 [![pypi]](https://pypi.org/project/pythondi/)
 [![pyversions]](http://pypi.python.org/pypi/pythondi)
-![badge](https://action-badges.now.sh/teamhide/pythondi)
 [![Downloads](https://pepy.tech/badge/pythondi)](https://pepy.tech/project/pythondi)
 
 ---
