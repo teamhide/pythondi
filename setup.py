@@ -6,7 +6,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="pythondi",
-    version="1.2.3",
+    version="1.2.4",
     author="Hide",
     author_email="padocon@naver.com",
     description="Python dependency injection library",
