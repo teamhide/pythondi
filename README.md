@@ -96,6 +96,15 @@ You can use lazy initializing through `lazy` option. (default `False`)
 
 For singleton, use `lazy=False`.
 
+```python
+class Usecase:
+    @inject(repo=SQLRepo)
+    def __init__(self, repo):
+        self.repo = repo
+```
+
+By default, manual injection is lazy. If you want a singleton, instantiate it like `repo=SQLRepo()`.
+
 ## For test
 
 In case of test codes, you probably want to use mock objects.

@@ -1,7 +1,9 @@
+import inspect
+
 from pytest import raises
 
-from pythondi import Provider, InjectException
-import inspect
+from pythondi import Provider
+from pythondi.exceptions import DoesNotBoundException
 
 
 class Repo:
@@ -30,7 +32,7 @@ def test_bind_lazy_is_false():
 
 def test_unbind():
     provider = Provider()
-    with raises(InjectException):
+    with raises(DoesNotBoundException):
         provider.unbind(interface=int)
 
     provider.bind(int, str)

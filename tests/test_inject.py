@@ -32,7 +32,7 @@ def test_sync_inject_without_parameter_lazy_is_true():
 
     @inject()
     def func(repo: Repo):
-        assert not isinstance(repo, SQLRepo)
+        assert isinstance(repo, SQLRepo)
 
     func()
 
@@ -53,9 +53,7 @@ def test_sync_inject_without_parameter_lazy_is_true_singleton():
     repo1 = func()
     repo2 = func2()
 
-    assert repo1 == repo2
-    assert inspect.isclass(repo1)
-    assert inspect.isclass(repo2)
+    assert repo1 != repo2
 
 
 def test_sync_inject_without_parameter_lazy_is_false():
@@ -99,8 +97,8 @@ def test_sync_inject_without_parameter_multiple_bind_lazy_true():
 
     @inject()
     def func(repo: Repo, usecase: Usecase):
-        assert not isinstance(repo, SQLRepo)
-        assert not isinstance(usecase, UserUsecase)
+        assert isinstance(repo, SQLRepo)
+        assert isinstance(usecase, UserUsecase)
 
     func()
 
@@ -151,7 +149,7 @@ async def test_async_inject_without_parameter_lazy_true():
 
     @inject()
     async def func(repo: Repo):
-        assert not isinstance(repo, SQLRepo)
+        assert isinstance(repo, SQLRepo)
 
     await func()
 
@@ -178,8 +176,8 @@ async def test_async_inject_without_parameter_multiple_bind_lazy_true():
 
     @inject()
     async def func(repo: Repo, usecase: Usecase):
-        assert not isinstance(repo, SQLRepo)
-        assert not isinstance(usecase, UserUsecase)
+        assert isinstance(repo, SQLRepo)
+        assert isinstance(usecase, UserUsecase)
 
     await func()
 
