@@ -82,6 +82,20 @@ class Usecase:
 
 In this case, do not have to configure providers and type annotation.
 
+## Lazy initializing
+
+```python
+from pythondi import Provider
+
+
+provider = Provider()
+provider.bind(Repo, SQLRepo, lazy=True)
+```
+
+You can use lazy initializing through `lazy` option. (default `False`)
+
+For singleton, use `lazy=False`.
+
 ## For test
 
 In case of test codes, you probably want to use mock objects.
