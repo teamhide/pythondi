@@ -60,7 +60,11 @@ def inject(**params):
             # Case of manual injection
             else:
                 for k, v in params.items():
-                    kwargs[k] = v()
+                    replacement = v
+                    if inspect.isclass(replacement):
+                        replacement = replacement()
+
+                    kwargs[k] = replacement
 
             if inspect.iscoroutinefunction(func):
                 async def _inject(*args, **kwargs):

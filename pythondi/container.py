@@ -1,3 +1,5 @@
+from typing import Optional
+
 from pythondi.provider import Provider
 
 
@@ -10,7 +12,7 @@ class Container:
         cls._provider = provider
 
     @classmethod
-    def get(cls) -> Provider:
+    def get(cls) -> Optional[Provider]:
         """Get current provider"""
         return cls._provider
 
