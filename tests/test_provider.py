@@ -1,40 +1,40 @@
 from pytest import raises
 
 from pythondi import Provider, InjectException
+import inspect
 
 
-def test_bind_class_init():
-    provider = Provider(cls=int, new_cls=str)
-    assert provider.bindings[int] == str
+class Repo:
+    def __init__(self):
+        pass
 
 
-def test_bind_class_init_with_dict():
-    bind = {int: str}
-    provider = Provider(classes=bind)
-    assert provider.bindings[int] == str
+class SQLRepo:
+    def __init__(self):
+        pass
 
 
-def test_bind():
+def test_bind_lazy_is_true():
     provider = Provider()
-    provider.bind(int, str)
-    assert provider.bindings[int] == str
+    provider.bind(Repo, SQLRepo, lazy=True)
+    assert provider.bindings[Repo] == SQLRepo
+    assert inspect.isclass(provider.bindings[Repo])
 
 
-def test_bind_with_classes():
+def test_bind_lazy_is_false():
     provider = Provider()
-    provider.bind(classes={int: str})
-    assert provider.bindings[int] == str
-    provider.bind(int, dict)
-    assert provider.bindings[int] == dict
+    provider.bind(Repo, SQLRepo, lazy=False)
+    assert provider.bindings[Repo] != SQLRepo
+    assert not inspect.isclass(provider.bindings[Repo])
 
 
 def test_unbind():
     provider = Provider()
     with raises(InjectException):
-        provider.unbind(cls=int)
+        provider.unbind(interface=int)
 
     provider.bind(int, str)
-    provider.unbind(cls=int)
+    provider.unbind(interface=int)
     assert provider.bindings == {}
 
 

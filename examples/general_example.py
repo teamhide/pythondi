@@ -9,19 +9,9 @@ class Usecase:
 
 
 if __name__ == '__main__':
-    # There is three ways to binding classes
-    # 1. Init provider without arguments
+    # Init provider
     provider = Provider()
-    # Bind one by one
     provider.bind(Repo, SQLRepo)
-    # Bind all at once
-    provider.bind(classes={Repo: SQLRepo})
-
-    # 2. Init provider with arguments
-    provider = Provider(cls=Repo, new_cls=SQLRepo)
-
-    # 3. Init provider with dictionary
-    provider = Provider(classes={Repo: SQLRepo})
 
     # Inject with configure
     configure(provider=provider)

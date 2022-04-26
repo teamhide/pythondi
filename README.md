@@ -20,10 +20,6 @@ pip3 install pythondi
 
 First, you have to binding classes to provider.
 
-There is three different ways to binding.
-
-- Binding one by one
-
 ```python
 from pythondi import Provider
 
@@ -32,25 +28,6 @@ provider = Provider()
 provider.bind(Repo, SQLRepo)
 provider.bind(Usecase, CreateUsecase)
 ```
-
-- Binding at initialization
-
-```python
-from pythondi import Provider
-
-
-provider = Provider(cls=Repo, new_cls=SQLRepo)
-```
-
-- Binding at initialization with dictionary
-
-```python
-from pythondi import Provider
-
-
-provider = Provider(classes={Repo: SQLRepo, Usecase: CreateUsecase})
-```
-
 
 After binding, you need to configure it to container
 

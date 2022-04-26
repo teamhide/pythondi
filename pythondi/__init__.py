@@ -12,30 +12,19 @@ class InjectException(Exception):
 
 
 class Provider:
-    def __init__(self, cls=None, new_cls=None, classes: dict = None):
+    def __init__(self):
         self._bindings = {}
 
-        if cls and new_cls:
-            self._bindings[cls] = new_cls
+    def bind(self, interface=None, impl=None, lazy: bool = False) -> Optional[NoReturn]:
+        if lazy is False:
+            impl = impl()
 
-        if classes:
-            for k, v in classes.items():
-                self._bindings[k] = v
+        self._bindings[interface] = impl
 
-    def bind(self, cls=None, new_cls=None, classes: dict = None,) -> Optional[NoReturn]:
-        """Bind class to another class"""
-        if cls and new_cls:
-            self._bindings[cls] = new_cls
-        elif classes:
-            for k, v in classes.items():
-                self._bindings[k] = v
-        else:
-            raise InjectException(msg="Binding exception")
-
-    def unbind(self, cls) -> Optional[NoReturn]:
+    def unbind(self, interface) -> Optional[NoReturn]:
         """Unbind class"""
         try:
-            self._bindings.pop(cls)
+            self._bindings.pop(interface)
         except KeyError:
             raise InjectException(msg="Unbind exception")
 
@@ -108,7 +97,11 @@ def inject(**params):
                 annotations = inspect.getfullargspec(func).annotations
                 for k, v in annotations.items():
                     if v in _provider.bindings and k not in kwargs:
-                        kwargs[k] = _provider.bindings[v]()
+                        replacement = _provider.bindings[v]
+                        if inspect.isclass(replacement):
+                            kwargs[k] = replacement()
+
+                        kwargs[k] = _provider.bindings[v]
             # Case of manual injection
             else:
                 for k, v in params.items():
