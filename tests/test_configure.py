@@ -1,13 +1,12 @@
 from pytest import raises
-from pythondi import Container
 
 from pythondi import (
     configure,
     configure_after_clear,
     Provider,
-    InjectException,
     Container,
 )
+from pythondi.exceptions import AlreadyInjectedException
 
 
 class Repo:
@@ -27,7 +26,7 @@ def test_configure_lazy_is_true():
     configure(provider=provider)
     assert isinstance(Container.get(), Provider)
     assert Container.get().bindings[Repo] == SQLRepo
-    with raises(InjectException):
+    with raises(AlreadyInjectedException):
         configure(provider=provider)
     Container.clear()
 
@@ -39,7 +38,7 @@ def test_configure_lazy_is_false():
     configure(provider=provider)
     assert isinstance(Container.get(), Provider)
     assert Container.get().bindings[Repo] != SQLRepo
-    with raises(InjectException):
+    with raises(AlreadyInjectedException):
         configure(provider=provider)
     Container.clear()
 

@@ -3,66 +3,21 @@ import threading
 from functools import wraps
 from typing import Optional, NoReturn
 
+from pythondi.container import Container
+from pythondi.exceptions import (
+    ProviderDoesNotConfiguredException,
+    AlreadyInjectedException,
+)
+from pythondi.provider import Provider
+
 _LOCK = threading.RLock()
-
-
-class InjectException(Exception):
-    def __init__(self, msg: str):
-        super().__init__(msg)
-
-
-class Provider:
-    def __init__(self):
-        self._bindings = {}
-
-    def bind(self, interface=None, impl=None, lazy: bool = False) -> Optional[NoReturn]:
-        if lazy is False:
-            impl = impl()
-
-        self._bindings[interface] = impl
-
-    def unbind(self, interface) -> Optional[NoReturn]:
-        """Unbind class"""
-        try:
-            self._bindings.pop(interface)
-        except KeyError:
-            raise InjectException(msg="Unbind exception")
-
-    def clear_bindings(self) -> None:
-        """Clear bindings"""
-        self._bindings = {}
-
-    @property
-    def bindings(self) -> dict:
-        """Get current bindings"""
-        return self._bindings
-
-
-class Container:
-    _instance = None
-    _provider = None
-
-    @classmethod
-    def set(cls, provider: Provider) -> None:
-        """Set provider"""
-        cls._provider = provider
-
-    @classmethod
-    def get(cls) -> Provider:
-        """Get current provider"""
-        return cls._provider
-
-    @classmethod
-    def clear(cls) -> None:
-        """Clear provider"""
-        cls._provider = None
 
 
 def configure(provider: Provider) -> Optional[NoReturn]:
     """Configure provider to container"""
     with _LOCK:
         if Container.get():
-            raise InjectException(msg="Already injected")
+            raise AlreadyInjectedException
 
         Container.set(provider=provider)
 
@@ -90,7 +45,7 @@ def inject(**params):
         def wrapper(*args, **kwargs):
             _provider = Container.get()
             if not _provider:
-                raise InjectException(msg="Provider does not configured")
+                raise ProviderDoesNotConfiguredException
 
             # Case of auto injection
             if not params:
@@ -117,3 +72,11 @@ def inject(**params):
             return _inject(*args, **kwargs)
         return wrapper
     return inner_func
+
+
+__all__ = [
+    "Provider",
+    "configure",
+    "configure_after_clear",
+    "inject",
+]
