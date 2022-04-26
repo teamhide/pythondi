@@ -31,10 +31,10 @@ def test_bind_lazy_is_false():
 def test_unbind():
     provider = Provider()
     with raises(InjectException):
-        provider.unbind(cls=int)
+        provider.unbind(interface=int)
 
     provider.bind(int, str)
-    provider.unbind(cls=int)
+    provider.unbind(interface=int)
     assert provider.bindings == {}
 
 

@@ -21,10 +21,10 @@ class Provider:
 
         self._bindings[interface] = impl
 
-    def unbind(self, cls) -> Optional[NoReturn]:
+    def unbind(self, interface) -> Optional[NoReturn]:
         """Unbind class"""
         try:
-            self._bindings.pop(cls)
+            self._bindings.pop(interface)
         except KeyError:
             raise InjectException(msg="Unbind exception")
 
