@@ -54,9 +54,9 @@ def inject(**params):
                     if v in _provider.bindings and k not in kwargs:
                         replacement = _provider.bindings[v]
                         if inspect.isclass(replacement):
-                            kwargs[k] = replacement()
+                            replacement = replacement()
 
-                        kwargs[k] = _provider.bindings[v]
+                        kwargs[k] = replacement
             # Case of manual injection
             else:
                 for k, v in params.items():

@@ -2,7 +2,6 @@ from pythondi.provider import Provider
 
 
 class Container:
-    _instance = None
     _provider = None
 
     @classmethod
