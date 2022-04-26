@@ -1,3 +1,5 @@
+import inspect
+
 import pytest
 
 from pythondi import inject, Provider, configure_after_clear
@@ -23,9 +25,42 @@ class UserUsecase:
         pass
 
 
-def test_sync_inject_without_parameter():
+def test_sync_inject_without_parameter_lazy_is_true():
     provider = Provider()
-    provider.bind(Repo, SQLRepo)
+    provider.bind(Repo, SQLRepo, lazy=True)
+    configure_after_clear(provider)
+
+    @inject()
+    def func(repo: Repo):
+        assert not isinstance(repo, SQLRepo)
+
+    func()
+
+
+def test_sync_inject_without_parameter_lazy_is_true_singleton():
+    provider = Provider()
+    provider.bind(Repo, SQLRepo, lazy=True)
+    configure_after_clear(provider)
+
+    @inject()
+    def func(repo: Repo):
+        return repo
+
+    @inject()
+    def func2(repo: Repo):
+        return repo
+
+    repo1 = func()
+    repo2 = func2()
+
+    assert repo1 == repo2
+    assert inspect.isclass(repo1)
+    assert inspect.isclass(repo2)
+
+
+def test_sync_inject_without_parameter_lazy_is_false():
+    provider = Provider()
+    provider.bind(Repo, SQLRepo, lazy=False)
     configure_after_clear(provider)
 
     @inject()
@@ -35,35 +70,45 @@ def test_sync_inject_without_parameter():
     func()
 
 
-def test_sync_inject_without_parameter_multiple_bind():
+def test_sync_inject_without_parameter_lazy_is_false_singleton():
     provider = Provider()
-    provider.bind(Repo, SQLRepo)
-    provider.bind(Usecase, UserUsecase)
+    provider.bind(Repo, SQLRepo, lazy=False)
+    configure_after_clear(provider)
+
+    @inject()
+    def func(repo: Repo):
+        return repo
+
+    @inject()
+    def func2(repo: Repo):
+        return repo
+
+    repo1 = func()
+    repo2 = func2()
+
+    assert repo1 == repo2
+    assert not inspect.isclass(repo1)
+    assert not inspect.isclass(repo2)
+
+
+def test_sync_inject_without_parameter_multiple_bind_lazy_true():
+    provider = Provider()
+    provider.bind(Repo, SQLRepo, lazy=True)
+    provider.bind(Usecase, UserUsecase, lazy=True)
     configure_after_clear(provider)
 
     @inject()
     def func(repo: Repo, usecase: Usecase):
-        assert isinstance(repo, SQLRepo)
-        assert isinstance(usecase, UserUsecase)
+        assert not isinstance(repo, SQLRepo)
+        assert not isinstance(usecase, UserUsecase)
 
     func()
 
 
-def test_sync_inject_with_classes_argument():
+def test_sync_inject_without_parameter_multiple_bind_lazy_false():
     provider = Provider()
-    provider.bind(classes={Repo: SQLRepo})
-    configure_after_clear(provider)
-
-    @inject()
-    def func(repo: Repo):
-        assert isinstance(repo, SQLRepo)
-
-    func()
-
-
-def test_sync_inject_with_classes_argument_multiple_bind():
-    provider = Provider()
-    provider.bind(classes={Repo: SQLRepo, Usecase: UserUsecase})
+    provider.bind(Repo, SQLRepo, lazy=False)
+    provider.bind(Usecase, UserUsecase, lazy=False)
     configure_after_clear(provider)
 
     @inject()
@@ -99,9 +144,22 @@ def test_sync_inject_with_parameter_multiple_bind():
 
 
 @pytest.mark.asyncio
-async def test_async_inject_without_parameter():
+async def test_async_inject_without_parameter_lazy_true():
     provider = Provider()
-    provider.bind(Repo, SQLRepo)
+    provider.bind(Repo, SQLRepo, lazy=True)
+    configure_after_clear(provider)
+
+    @inject()
+    async def func(repo: Repo):
+        assert not isinstance(repo, SQLRepo)
+
+    await func()
+
+
+@pytest.mark.asyncio
+async def test_async_inject_without_parameter_lazy_false():
+    provider = Provider()
+    provider.bind(Repo, SQLRepo, lazy=False)
     configure_after_clear(provider)
 
     @inject()
@@ -112,37 +170,25 @@ async def test_async_inject_without_parameter():
 
 
 @pytest.mark.asyncio
-async def test_async_inject_without_parameter_multiple_bind():
+async def test_async_inject_without_parameter_multiple_bind_lazy_true():
     provider = Provider()
-    provider.bind(Repo, SQLRepo)
-    provider.bind(Usecase, UserUsecase)
+    provider.bind(Repo, SQLRepo, lazy=True)
+    provider.bind(Usecase, UserUsecase, lazy=True)
     configure_after_clear(provider)
 
     @inject()
     async def func(repo: Repo, usecase: Usecase):
-        assert isinstance(repo, SQLRepo)
-        assert isinstance(usecase, UserUsecase)
+        assert not isinstance(repo, SQLRepo)
+        assert not isinstance(usecase, UserUsecase)
 
     await func()
 
 
 @pytest.mark.asyncio
-async def test_async_inject_with_classes_argument():
+async def test_async_inject_without_parameter_multiple_bind_lazy_false():
     provider = Provider()
-    provider.bind(classes={Repo: SQLRepo})
-    configure_after_clear(provider)
-
-    @inject()
-    async def func(repo: Repo):
-        assert isinstance(repo, SQLRepo)
-
-    await func()
-
-
-@pytest.mark.asyncio
-async def test_async_inject_with_classes_argument_multiple_bind():
-    provider = Provider()
-    provider.bind(classes={Repo: SQLRepo, Usecase: UserUsecase})
+    provider.bind(Repo, SQLRepo, lazy=False)
+    provider.bind(Usecase, UserUsecase, lazy=False)
     configure_after_clear(provider)
 
     @inject()
@@ -177,20 +223,3 @@ async def test_async_inject_with_parameter_multiple_bind():
         assert isinstance(usecase, UserUsecase)
 
     await func()
-
-
-@pytest.mark.asyncio
-async def test_manual_provide_args_outside():
-    provider = Provider()
-    provider.bind(classes={Repo: SQLRepo})
-    configure_after_clear(provider)
-
-    class MockRepo:
-        pass
-
-    @inject()
-    async def func(repo: Repo):
-        return repo
-
-    result = await func(repo=MockRepo())
-    assert isinstance(result, MockRepo)

@@ -15,15 +15,11 @@ class Provider:
     def __init__(self):
         self._bindings = {}
 
-    def bind(self, cls=None, new_cls=None, classes: dict = None,) -> Optional[NoReturn]:
-        """Bind class to another class"""
-        if cls and new_cls:
-            self._bindings[cls] = new_cls
-        elif classes:
-            for k, v in classes.items():
-                self._bindings[k] = v
-        else:
-            raise InjectException(msg="Binding exception")
+    def bind(self, interface=None, impl=None, lazy: bool = False) -> Optional[NoReturn]:
+        if lazy is False:
+            impl = impl()
+
+        self._bindings[interface] = impl
 
     def unbind(self, cls) -> Optional[NoReturn]:
         """Unbind class"""
@@ -101,7 +97,11 @@ def inject(**params):
                 annotations = inspect.getfullargspec(func).annotations
                 for k, v in annotations.items():
                     if v in _provider.bindings and k not in kwargs:
-                        kwargs[k] = _provider.bindings[v]()
+                        replacement = _provider.bindings[v]
+                        if inspect.isclass(replacement):
+                            kwargs[k] = replacement()
+
+                        kwargs[k] = _provider.bindings[v]
             # Case of manual injection
             else:
                 for k, v in params.items():
