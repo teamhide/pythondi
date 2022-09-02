@@ -1,7 +1,6 @@
 import inspect
 import threading
 from functools import wraps
-from typing import Optional, NoReturn
 
 from pythondi.container import Container
 from pythondi.exceptions import (
@@ -13,7 +12,7 @@ from pythondi.provider import Provider
 _LOCK = threading.RLock()
 
 
-def configure(provider: Provider) -> Optional[NoReturn]:
+def configure(provider: Provider) -> None:
     """Configure provider to container"""
     with _LOCK:
         if Container.get():
