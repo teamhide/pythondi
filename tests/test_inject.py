@@ -1,8 +1,10 @@
 import inspect
 
 import pytest
+from pytest import raises
 
-from pythondi import inject, Provider, configure_after_clear
+from pythondi import inject, Provider, Container, configure_after_clear
+from pythondi.exceptions import ProviderDoesNotConfiguredException
 
 
 class Repo:
@@ -23,6 +25,17 @@ class Usecase:
 class UserUsecase:
     def __init__(self):
         pass
+
+
+def test_sync_inject_without_provider_configure():
+    Container.clear()
+
+    @inject()
+    def func(repo: Repo):
+        return repo
+
+    with raises(ProviderDoesNotConfiguredException):
+        func(repo=SQLRepo)
 
 
 def test_sync_inject_without_parameter_lazy_is_true():
